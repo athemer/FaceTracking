@@ -38,6 +38,9 @@ class DetailsView: UIView {
 @available(iOS 10.0, *)
 class ViewController: UIViewController {
 
+    
+    let objects = Objects()
+    
     var session: AVCaptureSession?
     var stillOutput = AVCaptureStillImageOutput()
     var borderLayer: CAShapeLayer?
@@ -101,6 +104,7 @@ class ViewController: UIViewController {
         btn.addTarget(self, action: #selector(snap), for: .touchUpInside)
     
         
+        
         let btn2 = UIButton()
         btn2.setTitle("+1", for: .normal)
         btn2.frame = CGRect(x: 100, y: 0, width: 100, height: 50)
@@ -120,6 +124,7 @@ class ViewController: UIViewController {
         view.addSubview(detailsView)
         view.addSubview(viewToAdd)
         view.addSubview(captureImageView)
+        setUpObjects()
         view.bringSubview(toFront: detailsView)
         view.bringSubview(toFront: viewToAdd)
         view.bringSubview(toFront: captureImageView)
@@ -132,6 +137,25 @@ class ViewController: UIViewController {
         sessionPrepare()
         
         session?.startRunning()
+    }
+    
+    func setUpObjects() {
+        
+        objects.progressView.progress = 0 
+        
+        objects.upperBackground.addSubview(objects.sensitivityBtn)
+        objects.upperBackground.addSubview(objects.progressView)
+
+        
+        
+
+        view.addSubview(objects.upperBackground)
+        view.bringSubview(toFront: objects.upperBackground)
+
+        
+        
+        
+        
     }
 }
 

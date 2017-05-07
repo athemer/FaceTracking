@@ -46,6 +46,22 @@ class ViewController: UIViewController {
     var borderLayer: CAShapeLayer?
    
     
+    var sensitive: Float = 10.0
+    
+    var progress: Float = 0 {
+        
+        willSet {
+            
+            print(newValue)
+            
+            if newValue >= 1 {
+                snap()
+            }
+            
+        }
+
+    }
+    
     var sensitivity = 40
     
     var sensitivityCount: Int = 0 {
@@ -84,78 +100,67 @@ class ViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        previewLayer?.frame = CGRect(x: 0, y: 100, width: 375, height: 467)
+        previewLayer?.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 150 )
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let previewLayer = previewLayer else { return }
-        
-        let viewToAdd = UIView(frame: CGRect(x: 0, y: 567, width: 375, height: 100))
-        viewToAdd.backgroundColor = .red
-        let view2 = UIView(frame: CGRect(x: 0, y: 0, width: 375, height: 50))
-        view2.backgroundColor = .green
-        
-        let btn = UIButton()
-        btn.setTitle("SNAP!!!", for: .normal)
-        btn.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        btn.backgroundColor = .yellow
-        btn.tintColor = .blue
-        btn.addTarget(self, action: #selector(snap), for: .touchUpInside)
-    
-        
-        
-        let btn2 = UIButton()
-        btn2.setTitle("+1", for: .normal)
-        btn2.frame = CGRect(x: 100, y: 0, width: 100, height: 50)
-        btn2.backgroundColor = .white
-        btn2.tintColor = .red
-        btn2.addTarget(self, action: #selector(plusOne), for: .touchUpInside)
-        
-        
-        captureImageView.image = UIImage(named: "sample")
-        captureImageView.contentMode = .scaleAspectFill
-        captureImageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        
-        viewToAdd.addSubview(btn)
-        viewToAdd.addSubview(btn2)
-        
+       
         view.layer.addSublayer(previewLayer)
         view.addSubview(detailsView)
-        view.addSubview(viewToAdd)
-        view.addSubview(captureImageView)
-        setUpObjects()
+        
         view.bringSubview(toFront: detailsView)
-        view.bringSubview(toFront: viewToAdd)
-        view.bringSubview(toFront: captureImageView)
-
+        setUpObjects()
         
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         sessionPrepare()
         
         session?.startRunning()
     }
     
     func setUpObjects() {
-        
-        objects.progressView.progress = 0 
-        
+//        
         objects.upperBackground.addSubview(objects.sensitivityBtn)
         objects.upperBackground.addSubview(objects.progressView)
 
+//        captureImageView.image = UIImage(named: "sample")
+        captureImageView.backgroundColor = .clear
+        captureImageView.contentMode = .scaleAspectFill
+        captureImageView.frame = CGRect(x: UIScreen.main.bounds.width - 40, y: 0, width: 40, height: 75)
         
+        let btn = UIButton()
+        btn.setTitle("SNAP!!!", for: .normal)
+        btn.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
+        btn.backgroundColor = .blue
+        btn.tintColor = .white
+        btn.addTarget(self, action: #selector(snap), for: .touchUpInside)
         
+        let btn2 = UIButton()
+        btn2.setTitle("+1", for: .normal)
+        btn2.frame = CGRect(x: 105, y: 0, width: 100, height: 50)
+        btn2.backgroundColor = .blue
+        btn2.tintColor = .white
+        btn2.addTarget(self, action: #selector(plusOne), for: .touchUpInside)
+        
+        objects.lowerBackground.addSubview(captureImageView)
+        objects.lowerBackground.addSubview(btn)
+        objects.lowerBackground.addSubview(btn2)
 
         view.addSubview(objects.upperBackground)
-        view.bringSubview(toFront: objects.upperBackground)
+        view.addSubview(objects.lowerBackground)
 
-        
-        
-        
-        
+        view.bringSubview(toFront: objects.upperBackground)
+        view.bringSubview(toFront: objects.lowerBackground)
     }
 }
 
@@ -241,8 +246,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                     
                     print ("smiled")
                     
+                    countProgress(sensitive: sensitive)
 //                    snap()
-                    plusOne()
+//                    plusOne()
+                } else {
+                    
+                    objects.progressView.progress = 0
                 }
             }
  
@@ -284,10 +293,29 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func plusOne() {
         
-        sensitivityCount += 1
+//        sensitivityCount += 1
+//        progress = objects.progressView.progress
+        objects.progressView.progress += 1 / 10
+        
+        if objects.progressView.progress >= 1 {
+            objects.progressView.progress = 0
+        }
         
     }
     
+    func countProgress(sensitive: Float) {
+    
+        
+        objects.progressView.progress += 1 / sensitive
+        
+        print("hey", objects.progressView.progress)
+        
+        if objects.progressView.progress >= 1 {
+            objects.progressView.progress = 0
+            snap()
+        }
+        
+    }
     
     func add(sensitivity: Int) {
         

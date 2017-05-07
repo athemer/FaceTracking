@@ -30,7 +30,7 @@ class Objects {
         
         let lowerBg = UIView()
         lowerBg.backgroundColor = .black
-        lowerBg.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 150, width: UIScreen.main.bounds.width , height: 75)
+        lowerBg.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 75, width: UIScreen.main.bounds.width , height: 75)
         
         return lowerBg
         
@@ -44,7 +44,7 @@ class Objects {
 //        btn.setTitle("sensitivity", for: .normal)
         btn.setImage(UIImage(named: "speed")?.withRenderingMode(.alwaysOriginal), for: .normal)
 //        btn.tintColor = .white
-        btn.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        btn.frame = CGRect(x: 10, y: 10, width: 40, height: 40)
         
         return btn
     }()
@@ -55,15 +55,12 @@ class Objects {
         
         let pView = UIProgressView()
         pView.progressViewStyle = .bar
-        pView.trackTintColor = .red
-        pView.progressTintColor = .white
-        pView.frame = CGRect(x: 37.5, y: 60, width: 300, height: 10)
+        pView.trackTintColor = .white
+        pView.progressTintColor = .red
+        pView.frame = CGRect(x: 37.5, y: 60, width: UIScreen.main.bounds.width - 75, height: 1.5)
+        pView.progress = 0.0
         
         return pView
     }()
-    
-    
-    
-    
-    
+  
 }

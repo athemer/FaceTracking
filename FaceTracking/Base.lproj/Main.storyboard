@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,8 +20,65 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r90-Wg-Z1m">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="GRa-hX-oqo">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j0z-wA-rps" customClass="SpringView" customModule="Spring">
+                                <rect key="frame" x="67" y="28" width="240" height="265"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gV7-fI-KOn">
+                                        <rect key="frame" x="23" y="225" width="194" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k54-Os-eNn" customClass="SpringButton" customModule="Spring">
+                                        <rect key="frame" x="23" y="49" width="194" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p0q-Jh-hWG" customClass="SpringButton" customModule="Spring">
+                                        <rect key="frame" x="23" y="89" width="194" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Knq-jn-EpP" customClass="SpringButton" customModule="Spring">
+                                        <rect key="frame" x="23" y="125" width="194" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="265" id="6Ow-2l-x1j"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="r90-Wg-Z1m" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="NnB-gn-upT"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="r90-Wg-Z1m" secondAttribute="bottom" id="XdD-U3-VPu"/>
+                            <constraint firstItem="r90-Wg-Z1m" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="YLQ-Cm-CtF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="j0z-wA-rps" secondAttribute="trailing" constant="52" id="ctl-78-x9x"/>
+                            <constraint firstItem="j0z-wA-rps" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="dNX-nE-IEF"/>
+                            <constraint firstItem="r90-Wg-Z1m" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="fq0-wC-hVj"/>
+                            <constraint firstItem="j0z-wA-rps" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="51" id="rRh-a6-PCB"/>
+                            <constraint firstAttribute="trailing" secondItem="r90-Wg-Z1m" secondAttribute="trailing" id="xuP-mh-BDz"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="blur" destination="r90-Wg-Z1m" id="gBM-I9-aLP"/>
+                        <outlet property="cancel" destination="gV7-fI-KOn" id="u1U-cr-DOu"/>
+                        <outlet property="fast" destination="Knq-jn-EpP" id="nDn-c7-HT6"/>
+                        <outlet property="normal" destination="p0q-Jh-hWG" id="Z2O-BA-eRs"/>
+                        <outlet property="optionView" destination="j0z-wA-rps" id="F1w-lO-AiX"/>
+                        <outlet property="slow" destination="k54-Os-eNn" id="MsK-vy-Sv9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

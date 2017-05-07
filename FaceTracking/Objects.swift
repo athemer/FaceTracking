@@ -62,5 +62,15 @@ class Objects {
         
         return pView
     }()
+    
+    
+    var snapIcon: UIButton = {
+        let icon = UIButton()
+        icon.setImage(UIImage(named: "snapIcon")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        icon.frame = CGRect(x: (UIScreen.main.bounds.width - 50) / 2 , y: 12.5, width: 50, height: 50)
+        
+        
+        return icon
+    }()
   
 }

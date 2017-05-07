@@ -1,10 +1,11 @@
 //
 //  ViewController.swift
-//  AutoCamera
+
 
 
 import UIKit
 import AVFoundation
+import Spring
 
 class DetailsView: UIView {
 
@@ -35,31 +36,34 @@ class DetailsView: UIView {
 }
 
 
+
+
+
+
+
 @available(iOS 10.0, *)
 class ViewController: UIViewController {
 
     
     let objects = Objects()
     
+    let sensitivityLabel = UILabel()
+    
     var session: AVCaptureSession?
     var stillOutput = AVCaptureStillImageOutput()
     var borderLayer: CAShapeLayer?
    
     
-    var sensitive: Float = 10.0
+    var sensitive: Float = 20.0
     
     var progress: Float = 0 {
         
-        willSet {
-            
-            print(newValue)
-            
-            if newValue >= 1 {
+        didSet {
+            print (oldValue)
+            if oldValue >= 1 {
                 snap()
             }
-            
         }
-
     }
     
     var sensitivity = 40
@@ -75,6 +79,18 @@ class ViewController: UIViewController {
     
     var captureImageView: UIImageView = UIImageView()
 //    @IBOutlet weak var captureImageView: UIImageView!
+    
+    @IBOutlet weak var blur: UIVisualEffectView!
+    
+    @IBOutlet weak var optionView: SpringView!
+    
+    @IBOutlet weak var slow: SpringButton!
+    
+    @IBOutlet weak var normal: SpringButton!
+    
+    @IBOutlet weak var fast: SpringButton!
+    
+    @IBOutlet weak var cancel: UIButton!
     
     let detailsView: DetailsView = {
         let detailsView = DetailsView()
@@ -122,6 +138,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        optionView.isHidden = true
+        blur.isHidden = true
         
         sessionPrepare()
         
@@ -130,13 +148,43 @@ class ViewController: UIViewController {
     
     func setUpObjects() {
 //        
+        slow.setTitle("SLOW", for: .normal)
+        slow.addTarget(self, action: #selector(changeToSlow), for: .touchUpInside)
+        
+        normal.setTitle("NORMAL", for: .normal)
+        normal.addTarget(self, action: #selector(changeToNormal), for: .touchUpInside)
+        
+        fast.setTitle("FAST", for: .normal)
+        fast.addTarget(self, action: #selector(changeToFast), for: .touchUpInside)
+        
+        
+        
+        
+        sensitivityLabel.backgroundColor = .gray
+        sensitivityLabel.tintColor = .white
+        sensitivityLabel.text = "normal"
+        sensitivityLabel.frame = CGRect(x: 60, y: 10, width: 60, height: 40)
+        
+        cancel.setTitle("Cancel", for: .normal)
+        cancel.backgroundColor = .red
+        cancel.tintColor = .white
+        cancel.addTarget(self, action: #selector(dismissSensitivitySelection), for: .touchUpInside)
+        
+        
+        objects.sensitivityBtn.addTarget(self, action: #selector(changeSensitivity), for: .touchUpInside)
+        
         objects.upperBackground.addSubview(objects.sensitivityBtn)
         objects.upperBackground.addSubview(objects.progressView)
+        objects.upperBackground.addSubview(sensitivityLabel)
 
 //        captureImageView.image = UIImage(named: "sample")
         captureImageView.backgroundColor = .clear
         captureImageView.contentMode = .scaleAspectFill
         captureImageView.frame = CGRect(x: UIScreen.main.bounds.width - 40, y: 0, width: 40, height: 75)
+        
+        
+
+        
         
         let btn = UIButton()
         btn.setTitle("SNAP!!!", for: .normal)
@@ -152,15 +200,22 @@ class ViewController: UIViewController {
         btn2.tintColor = .white
         btn2.addTarget(self, action: #selector(plusOne), for: .touchUpInside)
         
+        
+        objects.snapIcon.addTarget(self, action: #selector(snap), for: .touchUpInside)
+        
         objects.lowerBackground.addSubview(captureImageView)
         objects.lowerBackground.addSubview(btn)
-        objects.lowerBackground.addSubview(btn2)
+//        objects.lowerBackground.addSubview(btn2)
+        objects.lowerBackground.addSubview(objects.snapIcon)
 
         view.addSubview(objects.upperBackground)
         view.addSubview(objects.lowerBackground)
 
         view.bringSubview(toFront: objects.upperBackground)
         view.bringSubview(toFront: objects.lowerBackground)
+        view.bringSubview(toFront: blur)
+        view.bringSubview(toFront: optionView)
+        
     }
 }
 
@@ -220,8 +275,27 @@ extension ViewController {
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        
+
+        
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate)
+        
+        
+        
+//        let comicEffect = CIFilter(name: "CIComicEffect")
+//        
+//        comicEffect!.setValue(, forKey: kCIInputImageKey)
+//        
+//        let filteredImage = UIImage(CIImage: comicEffect!.valueForKey(kCIOutputImageKey) as! CIImage!)
+//        
+//        dispatch_async(dispatch_get_main_queue())
+//        {
+//            self.imageView.image = filteredImage
+//        }
+        
+        
+        
         let ciImage = CIImage(cvImageBuffer: pixelBuffer!, options: attachments as! [String : Any]?)
         let options: [String : Any] = [CIDetectorImageOrientation: exifOrientation(orientation: UIDevice.current.orientation),
                                        CIDetectorSmile: true,
@@ -244,14 +318,22 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 
                 if faceFeature.hasSmile {
                     
-                    print ("smiled")
+//                    print ("smiled")
                     
                     countProgress(sensitive: sensitive)
 //                    snap()
 //                    plusOne()
+                    
+                    
                 } else {
                     
-                    objects.progressView.progress = 0
+                    DispatchQueue.main.async {
+                        
+                       self.objects.progressView.progress = 0
+                    
+                    }
+                    
+
                 }
             }
  
@@ -281,7 +363,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                     let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
                     self.captureImageView.image = image
                     
-
+                    UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
                 }
             })
 
@@ -291,29 +373,57 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
     }
     
+    func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+//            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .default))
+//            present(ac, animated: true)
+            
+            print ("successfully saved photo into photo library")
+        }
+    }
+    
     func plusOne() {
         
 //        sensitivityCount += 1
 //        progress = objects.progressView.progress
-        objects.progressView.progress += 1 / 10
+        
+        
+        objects.progressView.progress += 1 / 20
+        
+        print("huh?", objects.progressView.progress)
         
         if objects.progressView.progress >= 1 {
+            snap()
             objects.progressView.progress = 0
         }
-        
     }
     
     func countProgress(sensitive: Float) {
     
         
-        objects.progressView.progress += 1 / sensitive
+//        objects.progressView.progress += 1 / sensitive
+//        objects.progressView.setProgress(objects.progressView.progress, animated: true)
         
-        print("hey", objects.progressView.progress)
-        
-        if objects.progressView.progress >= 1 {
-            objects.progressView.progress = 0
-            snap()
+        DispatchQueue.main.async {
+            self.objects.progressView.progress += 1 / sensitive
+            
+            if self.objects.progressView.progress >= 1 {
+                
+                self.snap()
+                
+                self.objects.progressView.progress = 0
+            }
         }
+        
+        print("=========================", objects.progressView.progress)
+        
+
         
     }
     
@@ -328,6 +438,88 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         
         
+    }
+    
+    func changeSensitivity() {
+        
+        optionView.isHidden = false
+        blur.isHidden = false
+        blur.alpha = 0.0
+        
+        UIView.animate(withDuration: 0.5) {
+            self.blur.alpha = 1.0
+        }
+        
+        
+        optionView.animation = "fadeInDown"
+        optionView.curve = "linear"
+        optionView.force = 2.0
+        optionView.duration = 1.0
+        optionView.damping = 0.8
+        optionView.animate()
+        
+    }
+    
+    
+    func dismissSensitivitySelection() {
+        
+        UIView.animate(withDuration: 0.5) {
+            self.blur.alpha = 0.0
+        }
+        
+        optionView.animation = "fadeOut"
+        optionView.force = 2.0
+        optionView.duration = 1.0
+        optionView.damping = 0.8
+        optionView.animate()
+    }
+    
+    func changeToSlow() {
+        self.sensitive = 20.0
+        sensitivityLabel.text = "SLOW"
+        slow.animation = "morph"
+        slow.curve = "linear"
+        slow.duration = 0.5
+        slow.damping = 0.8
+        slow.velocity = 0.6
+        slow.animate()
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
+            self.dismissSensitivitySelection()
+        }
+    }
+    
+    func changeToNormal() {
+        
+        self.sensitive = 10.0
+        sensitivityLabel.text = "NORMAL"
+        normal.animation = "morph"
+        normal.curve = "linear"
+        normal.duration = 0.5
+        normal.damping = 0.8
+        normal.velocity = 0.6
+        normal.animate()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
+            self.dismissSensitivitySelection()
+        }
+
+    }
+    
+    func changeToFast(){
+        
+        self.sensitive = 5.0
+        sensitivityLabel.text = "FAST"
+        fast.animation = "morph"
+        fast.curve = "linear"
+        fast.duration = 0.5
+        fast.damping = 0.8
+        fast.velocity = 0.6
+        fast.animate()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 ) {
+            self.dismissSensitivitySelection()
+        }
     }
     
     func exifOrientation(orientation: UIDeviceOrientation) -> Int {

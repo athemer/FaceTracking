@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>ACCESS</string>
+	<string>We need permission to camera to take pictures </string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need permission to save photo into library</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

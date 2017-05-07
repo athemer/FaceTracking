@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DD2938317FE22B904EEF33D /* Pods_FaceTracking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */; };
 		D1B1DAA71EBC62B500994AD5 /* Objects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B1DAA61EBC62B500994AD5 /* Objects.swift */; };
 		E5AB7BD21D9E92DA0079BE5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */; };
 		E5AB7BD41D9E92DA0079BE5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD31D9E92DA0079BE5B /* ViewController.swift */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76075866759B858972E89B1D /* Pods-FaceTracking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceTracking.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking.release.xcconfig"; sourceTree = "<group>"; };
+		A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceTracking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1B1DAA61EBC62B500994AD5 /* Objects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Objects.swift; sourceTree = "<group>"; };
 		E5AB7BCE1D9E92DA0079BE5B /* FaceTracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceTracking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +29,7 @@
 		E5AB7BDB1D9E92DA0079BE5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E5AB7BDD1D9E92DA0079BE5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5AB7BE41D9E93390079BE5B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		ED9587B370EB53CB4E231739 /* Pods-FaceTracking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceTracking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,18 +38,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5AB7BE51D9E93390079BE5B /* AVFoundation.framework in Frameworks */,
+				5DD2938317FE22B904EEF33D /* Pods_FaceTracking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8AE05A48C1878C0CAC4240E6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ED9587B370EB53CB4E231739 /* Pods-FaceTracking.debug.xcconfig */,
+				76075866759B858972E89B1D /* Pods-FaceTracking.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		E5AB7BC51D9E92DA0079BE5B = {
 			isa = PBXGroup;
 			children = (
 				E5AB7BD01D9E92DA0079BE5B /* FaceTracking */,
 				E5AB7BCF1D9E92DA0079BE5B /* Products */,
 				E5AB7BE31D9E93390079BE5B /* Frameworks */,
+				8AE05A48C1878C0CAC4240E6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				E5AB7BE41D9E93390079BE5B /* AVFoundation.framework */,
+				A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -86,9 +102,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E5AB7BE01D9E92DA0079BE5B /* Build configuration list for PBXNativeTarget "FaceTracking" */;
 			buildPhases = (
+				7AA630B90E28E9C3F6995C6C /* [CP] Check Pods Manifest.lock */,
 				E5AB7BCA1D9E92DA0079BE5B /* Sources */,
 				E5AB7BCB1D9E92DA0079BE5B /* Frameworks */,
 				E5AB7BCC1D9E92DA0079BE5B /* Resources */,
+				CE0C8A02B91F8139FBB6D303 /* [CP] Embed Pods Frameworks */,
+				CAA5206A3F1A3BE2D83A8B21 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -146,6 +165,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7AA630B90E28E9C3F6995C6C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CAA5206A3F1A3BE2D83A8B21 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CE0C8A02B91F8139FBB6D303 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E5AB7BCA1D9E92DA0079BE5B /* Sources */ = {
@@ -275,6 +342,7 @@
 		};
 		E5AB7BE11D9E92DA0079BE5B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ED9587B370EB53CB4E231739 /* Pods-FaceTracking.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = V7ACRS83M5;
@@ -289,6 +357,7 @@
 		};
 		E5AB7BE21D9E92DA0079BE5B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76075866759B858972E89B1D /* Pods-FaceTracking.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = V7ACRS83M5;

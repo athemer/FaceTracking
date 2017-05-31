@@ -7,6 +7,7 @@ import UIKit
 import AVFoundation
 import Spring
 
+
 class DetailsView: UIView {
 
     lazy var detailsLabel: UILabel = {
@@ -280,21 +281,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate)
-        
-        
-        
-//        let comicEffect = CIFilter(name: "CIComicEffect")
-//        
-//        comicEffect!.setValue(, forKey: kCIInputImageKey)
-//        
-//        let filteredImage = UIImage(CIImage: comicEffect!.valueForKey(kCIOutputImageKey) as! CIImage!)
-//        
-//        dispatch_async(dispatch_get_main_queue())
-//        {
-//            self.imageView.image = filteredImage
-//        }
-        
-        
+ 
         
         let ciImage = CIImage(cvImageBuffer: pixelBuffer!, options: attachments as! [String : Any]?)
         let options: [String : Any] = [CIDetectorImageOrientation: exifOrientation(orientation: UIDevice.current.orientation),
@@ -304,6 +291,19 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
         let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription!, false)
+        
+ //========================================================
+        let comicEffect = CIFilter(name: "CIComicEffect")
+        
+        comicEffect!.setValue(ciImage, forKey: kCIInputImageKey)
+        
+        let filteredImage = UIImage(ciImage: comicEffect!.value(forKey: kCIOutputImageKey) as! CIImage!)
+        
+//        DispatchQueue.main.async {
+//            self.imageView.image = filteredImage
+//        }
+
+ //========================================================
         
         guard let features = allFeatures else { return }
         

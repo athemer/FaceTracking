@@ -6,6 +6,7 @@
 import UIKit
 import AVFoundation
 import Spring
+import CoreImage
 
 @available(iOS 10.0, *)
 class ViewController: UIViewController {
@@ -41,7 +42,11 @@ class ViewController: UIViewController {
     var captureImageView: UIImageView = UIImageView()
 
 
-    @IBOutlet weak var blur: UIVisualEffectView!
+    @IBOutlet weak var blur: UIVisualEffectView! = {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blr = UIVisualEffectView(effect: blurEffect)
+        return blr
+    }()
     
     @IBOutlet weak var optionView: SpringView!
     
@@ -77,6 +82,11 @@ class ViewController: UIViewController {
 
 
 
+    let imageView = UIImageView(frame: CGRect(x: 0, y: 75, width: 375, height: 667 - 150))
+
+    var isFiltered: Bool = false
+
+
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -89,7 +99,11 @@ class ViewController: UIViewController {
        
         view.layer.addSublayer(previewLayer)
         view.addSubview(detailsView)
-        
+
+
+        view.addSubview(imageView)
+
+
         view.bringSubview(toFront: detailsView)
         setUpObjects()
         
@@ -159,6 +173,8 @@ class ViewController: UIViewController {
     }
 }
 
+
+
 @available(iOS 10.0, *)
 extension ViewController {
     
@@ -178,8 +194,9 @@ extension ViewController {
             }
             
             let output = AVCaptureVideoDataOutput()
+
             output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-            
+
             output.alwaysDiscardsLateVideoFrames = true
 
             stillOutput = AVCaptureStillImageOutput()
@@ -231,31 +248,38 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         let attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate)
- 
-        
+
         let ciImage = CIImage(cvImageBuffer: pixelBuffer!, options: attachments as! [String : Any]?)
+
         let options: [String : Any] = [CIDetectorImageOrientation: exifOrientation(orientation: UIDevice.current.orientation),
                                        CIDetectorSmile: true,
                                        CIDetectorEyeBlink: true]
+
+
+        if isFiltered {
+
+            // TESTING
+            let filter = CIFilter(name: "CIComicEffect")
+
+            filter!.setValue(ciImage, forKey: kCIInputImageKey)
+            let filteredImage = UIImage(ciImage: filter!.value(forKey: kCIOutputImageKey) as! CIImage!)
+
+            DispatchQueue.main.async
+                {
+                    self.imageView.image = filteredImage
+
+            }
+
+        }
+
+
+
+
+
         let allFeatures = faceDetector?.features(in: ciImage, options: options)
     
         let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer)
         let cleanAperture = CMVideoFormatDescriptionGetCleanAperture(formatDescription!, false)
-        
- //========================================================
-        let comicEffect = CIFilter(name: "CIComicEffect")
-        
-        comicEffect!.setValue(ciImage, forKey: kCIInputImageKey)
-        
-        let filteredImage = UIImage(ciImage: comicEffect!.value(forKey: kCIOutputImageKey) as! CIImage!)
-
-        
-//        DispatchQueue.main.async {
-//            self.imageView.image = filteredImage
-//        }
-
- //========================================================
-// working on filter things 
 
         guard let features = allFeatures else { return }
         
@@ -320,6 +344,16 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             print ("FAIL!!!!!")
         }
 
+        //TEST
+        if isFiltered {
+            isFiltered = false
+            self.imageView.removeFromSuperview()
+
+        } else {
+            isFiltered = true
+            self.view.addSubview(imageView)
+        }
+
     }
 
 
@@ -338,7 +372,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             print ("successfully saved photo into photo library")
         }
     }
-
 
 
     func plusOne() {

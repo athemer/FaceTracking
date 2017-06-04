@@ -68,6 +68,9 @@ class Objects {
         return icon
     }()
 
+
+    
+
     var sensitivityLabel: UILabel = {
 
         let label = UILabel()

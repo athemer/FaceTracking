@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5DD2938317FE22B904EEF33D /* Pods_FaceTracking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */; };
+		D191B5F91EE3B7270080B003 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D191B5F81EE3B7270080B003 /* DetailsView.swift */; };
 		D1B1DAA71EBC62B500994AD5 /* Objects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B1DAA61EBC62B500994AD5 /* Objects.swift */; };
 		E5AB7BD21D9E92DA0079BE5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */; };
 		E5AB7BD41D9E92DA0079BE5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD31D9E92DA0079BE5B /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		76075866759B858972E89B1D /* Pods-FaceTracking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceTracking.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking.release.xcconfig"; sourceTree = "<group>"; };
 		A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceTracking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D191B5F81EE3B7270080B003 /* DetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
 		D1B1DAA61EBC62B500994AD5 /* Objects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Objects.swift; sourceTree = "<group>"; };
 		E5AB7BCE1D9E92DA0079BE5B /* FaceTracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceTracking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */,
 				E5AB7BD31D9E92DA0079BE5B /* ViewController.swift */,
 				D1B1DAA61EBC62B500994AD5 /* Objects.swift */,
+				D191B5F81EE3B7270080B003 /* DetailsView.swift */,
 				E5AB7BD51D9E92DA0079BE5B /* Main.storyboard */,
 				E5AB7BD81D9E92DA0079BE5B /* Assets.xcassets */,
 				E5AB7BDA1D9E92DA0079BE5B /* LaunchScreen.storyboard */,
@@ -220,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5AB7BD41D9E92DA0079BE5B /* ViewController.swift in Sources */,
+				D191B5F91EE3B7270080B003 /* DetailsView.swift in Sources */,
 				D1B1DAA71EBC62B500994AD5 /* Objects.swift in Sources */,
 				E5AB7BD21D9E92DA0079BE5B /* AppDelegate.swift in Sources */,
 			);

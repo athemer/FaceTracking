@@ -7,55 +7,17 @@ import UIKit
 import AVFoundation
 import Spring
 
-
-class DetailsView: UIView {
-
-    lazy var detailsLabel: UILabel = {
-        let detailsLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height))
-        detailsLabel.numberOfLines = 0
-        detailsLabel.textColor = .white
-        detailsLabel.font = UIFont.systemFont(ofSize: 18.0)
-        detailsLabel.textAlignment = .left
-       
-        return detailsLabel
-    }()
-    
-    func setup() {
-        layer.borderColor = UIColor.red.withAlphaComponent(0.7).cgColor
-        layer.borderWidth = 5.0
-  
-        addSubview(detailsLabel)
-    }
-    
-   override var frame: CGRect {
-        didSet(newFrame) {
-            var detailsFrame = detailsLabel.frame
-            detailsFrame = CGRect(x: 0, y: newFrame.size.height, width: newFrame.size.width * 2.0, height: newFrame.size.height / 2.0)
-            detailsLabel.frame = detailsFrame
-        }
-    }
-}
-
-
-
-
-
-
-
 @available(iOS 10.0, *)
 class ViewController: UIViewController {
 
     
     let objects = Objects()
-    
-    let sensitivityLabel = UILabel()
-    
+
     var session: AVCaptureSession?
     var stillOutput = AVCaptureStillImageOutput()
     var borderLayer: CAShapeLayer?
-   
-    
     var sensitive: Float = 20.0
+    var sensitivity = 40
     
     var progress: Float = 0 {
         
@@ -66,9 +28,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    var sensitivity = 40
-    
+
     var sensitivityCount: Int = 0 {
         willSet {
            print (newValue)
@@ -79,8 +39,8 @@ class ViewController: UIViewController {
     }
     
     var captureImageView: UIImageView = UIImageView()
-//    @IBOutlet weak var captureImageView: UIImageView!
-    
+
+
     @IBOutlet weak var blur: UIVisualEffectView!
     
     @IBOutlet weak var optionView: SpringView!
@@ -114,7 +74,10 @@ class ViewController: UIViewController {
     }()
     
     let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: [CIDetectorAccuracy : CIDetectorAccuracyLow])
-    
+
+
+
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer?.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 150 )
@@ -148,7 +111,7 @@ class ViewController: UIViewController {
     }
     
     func setUpObjects() {
-//        
+
         slow.setTitle("SLOW", for: .normal)
         slow.addTarget(self, action: #selector(changeToSlow), for: .touchUpInside)
         
@@ -157,73 +120,47 @@ class ViewController: UIViewController {
         
         fast.setTitle("FAST", for: .normal)
         fast.addTarget(self, action: #selector(changeToFast), for: .touchUpInside)
-        
-        
-        
-        
-        sensitivityLabel.backgroundColor = .gray
-        sensitivityLabel.tintColor = .white
-        sensitivityLabel.text = "normal"
-        sensitivityLabel.frame = CGRect(x: 60, y: 10, width: 60, height: 40)
-        
+
+
         cancel.setTitle("Cancel", for: .normal)
         cancel.backgroundColor = .red
         cancel.tintColor = .white
         cancel.addTarget(self, action: #selector(dismissSensitivitySelection), for: .touchUpInside)
-        
-        
+
         objects.sensitivityBtn.addTarget(self, action: #selector(changeSensitivity), for: .touchUpInside)
         
         objects.upperBackground.addSubview(objects.sensitivityBtn)
         objects.upperBackground.addSubview(objects.progressView)
-        objects.upperBackground.addSubview(sensitivityLabel)
+        objects.upperBackground.addSubview(objects.sensitivityLabel)
 
-//        captureImageView.image = UIImage(named: "sample")
         captureImageView.backgroundColor = .clear
         captureImageView.contentMode = .scaleAspectFill
         captureImageView.frame = CGRect(x: UIScreen.main.bounds.width - 40, y: 0, width: 40, height: 75)
-        
-        
 
-        
-        
-        let btn = UIButton()
-        btn.setTitle("SNAP!!!", for: .normal)
-        btn.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        btn.backgroundColor = .blue
-        btn.tintColor = .white
-        btn.addTarget(self, action: #selector(snap), for: .touchUpInside)
-        
-        let btn2 = UIButton()
-        btn2.setTitle("+1", for: .normal)
-        btn2.frame = CGRect(x: 105, y: 0, width: 100, height: 50)
-        btn2.backgroundColor = .blue
-        btn2.tintColor = .white
-        btn2.addTarget(self, action: #selector(plusOne), for: .touchUpInside)
-        
-        
+
         objects.snapIcon.addTarget(self, action: #selector(snap), for: .touchUpInside)
         
         objects.lowerBackground.addSubview(captureImageView)
-        objects.lowerBackground.addSubview(btn)
-//        objects.lowerBackground.addSubview(btn2)
         objects.lowerBackground.addSubview(objects.snapIcon)
 
         view.addSubview(objects.upperBackground)
         view.addSubview(objects.lowerBackground)
 
+
         view.bringSubview(toFront: objects.upperBackground)
         view.bringSubview(toFront: objects.lowerBackground)
         view.bringSubview(toFront: blur)
         view.bringSubview(toFront: optionView)
+
+
+        objects.setLowerBackgroundConstraints()
+        objects.setUpperBackgroundConstraints()
         
     }
 }
 
 @available(iOS 10.0, *)
 extension ViewController {
-
-    
     
     func sessionPrepare() {
         session = AVCaptureSession()
@@ -244,9 +181,7 @@ extension ViewController {
             output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
             
             output.alwaysDiscardsLateVideoFrames = true
-    
-            
-            
+
             stillOutput = AVCaptureStillImageOutput()
             stillOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
             
@@ -266,11 +201,26 @@ extension ViewController {
             output.setSampleBufferDelegate(self, queue: queue)
             
         } catch {
+
             print("error with creating AVCaptureDeviceInput")
+
+        }
+    }
+
+    func update(with faceRect: CGRect, text: String) {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.2) {
+                self.detailsView.detailsLabel.text = text
+                self.detailsView.alpha = 1.0
+                self.detailsView.frame = faceRect
+            }
         }
     }
     
 }
+
+
+
 
 @available(iOS 10.0, *)
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -298,6 +248,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         comicEffect!.setValue(ciImage, forKey: kCIInputImageKey)
         
         let filteredImage = UIImage(ciImage: comicEffect!.value(forKey: kCIOutputImageKey) as! CIImage!)
+
         
 //        DispatchQueue.main.async {
 //            self.imageView.image = filteredImage
@@ -305,6 +256,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
  //========================================================
 // working on filter things 
+
         guard let features = allFeatures else { return }
         
         for feature in features {
@@ -317,12 +269,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 update(with: faceRect, text: featureDetails.joined(separator: "\n"))
                 
                 if faceFeature.hasSmile {
-                    
-//                    print ("smiled")
+
                     
                     countProgress(sensitive: sensitive)
-//                    snap()
-//                    plusOne()
                     
                     
                 } else {
@@ -372,7 +321,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
 
     }
-    
+
+
+
     func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // we got back an error!
@@ -387,16 +338,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             print ("successfully saved photo into photo library")
         }
     }
-    
+
+
+
     func plusOne() {
-        
-//        sensitivityCount += 1
-//        progress = objects.progressView.progress
-        
-        
+
         objects.progressView.progress += 1 / 20
-        
-        print("huh?", objects.progressView.progress)
         
         if objects.progressView.progress >= 1 {
             snap()
@@ -405,10 +352,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     func countProgress(sensitive: Float) {
-    
-        
-//        objects.progressView.progress += 1 / sensitive
-//        objects.progressView.setProgress(objects.progressView.progress, animated: true)
         
         DispatchQueue.main.async {
             self.objects.progressView.progress += 1 / sensitive
@@ -422,11 +365,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         
         print("=========================", objects.progressView.progress)
-        
 
-        
     }
-    
+
+
     func add(sensitivity: Int) {
         
         if sensitivityCount < sensitivity {
@@ -476,7 +418,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func changeToSlow() {
         self.sensitive = 20.0
-        sensitivityLabel.text = "SLOW"
+        objects.sensitivityLabel.text = "SLOW"
         slow.animation = "morph"
         slow.curve = "linear"
         slow.duration = 0.5
@@ -492,7 +434,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func changeToNormal() {
         
         self.sensitive = 10.0
-        sensitivityLabel.text = "NORMAL"
+        objects.sensitivityLabel.text = "NORMAL"
         normal.animation = "morph"
         normal.curve = "linear"
         normal.duration = 0.5
@@ -509,7 +451,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func changeToFast(){
         
         self.sensitive = 5.0
-        sensitivityLabel.text = "FAST"
+        objects.sensitivityLabel.text = "FAST"
         fast.animation = "morph"
         fast.curve = "linear"
         fast.duration = 0.5
@@ -590,15 +532,3 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 }
 
-@available(iOS 10.0, *)
-extension ViewController {
-    func update(with faceRect: CGRect, text: String) {
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.2) {
-                self.detailsView.detailsLabel.text = text
-                self.detailsView.alpha = 1.0
-                self.detailsView.frame = faceRect
-            }
-        }
-    }
-}

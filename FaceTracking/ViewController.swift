@@ -8,10 +8,21 @@ import AVFoundation
 import Spring
 import CoreImage
 
+
+@available(iOS 10.0, *)
+protocol photoManagementDelegate: class {
+
+    func managerWillPushWith(_ manager: ViewController, Data: [Photo] )
+
+}
+
 @available(iOS 10.0, *)
 class ViewController: UIViewController {
 
-    
+    weak var delegate: photoManagementDelegate?
+
+    var photoArray: [Photo] = []
+
     let objects = Objects()
 
     var session: AVCaptureSession?
@@ -212,6 +223,12 @@ class ViewController: UIViewController {
 
         guard let vc  = self.storyboard?.instantiateViewController(withIdentifier: "PhotoGridCollectionViewController") as? PhotoGridCollectionViewController else { return }
 
+//        DispatchQueue.main.async{
+//            self.delegate?.managerWillPushWith(self, Data: self.photoArray)
+//        }
+
+        vc.photoArray = self.photoArray
+
         self.navigationController?.pushViewController(vc, animated: true)
 
     }
@@ -381,8 +398,15 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                     let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
                     let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
                     self.captureImageView.image = image
+
+                    let imageToAppend = Photo(photoImage: image)
+
+                    self.photoArray.append(imageToAppend)
+
+
+                    //Commeneted for now
+//                    UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
                     
-                    UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
                 }
             })
 
@@ -610,4 +634,5 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         return frame
     }
 }
+
 

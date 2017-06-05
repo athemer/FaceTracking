@@ -8,18 +8,24 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
 
 class PhotoGridCollectionViewController: UICollectionViewController {
+
+    var photoArray : [Photo] = []
+    var selectedPhotoArray: [Photo] = []
+    var selectedItem: [Int] = []
 
     let screensize = UIScreen.main.bounds
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBar.isHidden = false 
+        self.navigationController?.navigationBar.isHidden = false
+
+        self.collectionView?.allowsMultipleSelection = true
 
         let nib = UINib(nibName: "PhotoGridCollectionViewCell", bundle: nil)
+
         self.collectionView?.register(nib, forCellWithReuseIdentifier: "PhotoGridCollectionViewCell")
 
     }
@@ -49,16 +55,42 @@ class PhotoGridCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 100
+        return photoArray.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoGridCollectionViewCell", for: indexPath) as! PhotoGridCollectionViewCell
-    
-        // Configure the cell
-    
+
+        
+        cell.photoImageView.image = photoArray[indexPath.item].photoImage
+
         return cell
+
     }
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        self.selectedItem.append(indexPath.item)
+
+        print (" item \(indexPath.item) is selected")
+
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+
+
+        print (" item \(indexPath.item) is DESELECTED")
+    }
+
+    // Management Delegate
+
+//    @available(iOS 10.0, *)
+//    func managerWillPushWith(_ manager: ViewController, Data: [Photo]) {
+//
+//        self.photoArray = Data
+//        self.collectionView?.reloadData()
+//
+//    }
 
     // MARK: UICollectionViewDelegate
 
@@ -90,5 +122,32 @@ class PhotoGridCollectionViewController: UICollectionViewController {
     
     }
     */
+
+    func saveToAlbum() {
+
+
+        for photo in photoArray {
+
+            let image = photo.photoImage
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
+
+
+    }
+
+    func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+            //            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+            //            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            //            present(ac, animated: true)
+
+            print ("successfully saved photo into photo library")
+        }
+    }
 
 }

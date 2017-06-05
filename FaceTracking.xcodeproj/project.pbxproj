@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		5DD2938317FE22B904EEF33D /* Pods_FaceTracking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */; };
 		D191B5F91EE3B7270080B003 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D191B5F81EE3B7270080B003 /* DetailsView.swift */; };
+		D191B5FB1EE507D90080B003 /* PhotoGridCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D191B5FA1EE507D90080B003 /* PhotoGridCollectionViewController.swift */; };
+		D191B6021EE508DF0080B003 /* PhotoGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D191B6001EE508DF0080B003 /* PhotoGridCollectionViewCell.swift */; };
+		D191B6031EE508DF0080B003 /* PhotoGridCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D191B6011EE508DF0080B003 /* PhotoGridCollectionViewCell.xib */; };
 		D1B1DAA71EBC62B500994AD5 /* Objects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B1DAA61EBC62B500994AD5 /* Objects.swift */; };
 		E5AB7BD21D9E92DA0079BE5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */; };
 		E5AB7BD41D9E92DA0079BE5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AB7BD31D9E92DA0079BE5B /* ViewController.swift */; };
@@ -22,6 +25,9 @@
 		76075866759B858972E89B1D /* Pods-FaceTracking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceTracking.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceTracking/Pods-FaceTracking.release.xcconfig"; sourceTree = "<group>"; };
 		A675083FDAB5C207AB324571 /* Pods_FaceTracking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FaceTracking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D191B5F81EE3B7270080B003 /* DetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		D191B5FA1EE507D90080B003 /* PhotoGridCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoGridCollectionViewController.swift; sourceTree = "<group>"; };
+		D191B6001EE508DF0080B003 /* PhotoGridCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoGridCollectionViewCell.swift; sourceTree = "<group>"; };
+		D191B6011EE508DF0080B003 /* PhotoGridCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoGridCollectionViewCell.xib; sourceTree = "<group>"; };
 		D1B1DAA61EBC62B500994AD5 /* Objects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Objects.swift; sourceTree = "<group>"; };
 		E5AB7BCE1D9E92DA0079BE5B /* FaceTracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceTracking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5AB7BD11D9E92DA0079BE5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +87,9 @@
 				E5AB7BD31D9E92DA0079BE5B /* ViewController.swift */,
 				D1B1DAA61EBC62B500994AD5 /* Objects.swift */,
 				D191B5F81EE3B7270080B003 /* DetailsView.swift */,
+				D191B5FA1EE507D90080B003 /* PhotoGridCollectionViewController.swift */,
+				D191B6001EE508DF0080B003 /* PhotoGridCollectionViewCell.swift */,
+				D191B6011EE508DF0080B003 /* PhotoGridCollectionViewCell.xib */,
 				E5AB7BD51D9E92DA0079BE5B /* Main.storyboard */,
 				E5AB7BD81D9E92DA0079BE5B /* Assets.xcassets */,
 				E5AB7BDA1D9E92DA0079BE5B /* LaunchScreen.storyboard */,
@@ -164,6 +173,7 @@
 				E5AB7BDC1D9E92DA0079BE5B /* LaunchScreen.storyboard in Resources */,
 				E5AB7BD91D9E92DA0079BE5B /* Assets.xcassets in Resources */,
 				E5AB7BD71D9E92DA0079BE5B /* Main.storyboard in Resources */,
+				D191B6031EE508DF0080B003 /* PhotoGridCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +233,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5AB7BD41D9E92DA0079BE5B /* ViewController.swift in Sources */,
+				D191B6021EE508DF0080B003 /* PhotoGridCollectionViewCell.swift in Sources */,
+				D191B5FB1EE507D90080B003 /* PhotoGridCollectionViewController.swift in Sources */,
 				D191B5F91EE3B7270080B003 /* DetailsView.swift in Sources */,
 				D1B1DAA71EBC62B500994AD5 /* Objects.swift in Sources */,
 				E5AB7BD21D9E92DA0079BE5B /* AppDelegate.swift in Sources */,

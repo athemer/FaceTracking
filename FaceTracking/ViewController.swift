@@ -82,15 +82,44 @@ class ViewController: UIViewController {
 
 
 
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 75, width: 375, height: 667 - 150))
+    let imageView = UIImageView(frame: CGRect(x: -50, y: -50, width: 667 - 150, height: 375))
 
     var isFiltered: Bool = false
 
 
 
+
+    // Controller Life Cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        captureImageView.isUserInteractionEnabled = true
+
+
+
+        optionView.isHidden = true
+
+        blur.isHidden = true
+
+        sessionPrepare()
+
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer?.frame = CGRect(x: 0, y: 75, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 150 )
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+
+        super.viewWillAppear(animated)
+
+        print("========== VIEWWILLAPPEAR ==========")
+
+        self.navigationController?.navigationBar.isHidden = true
+
+        session?.startRunning()
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -103,6 +132,8 @@ class ViewController: UIViewController {
 
         view.addSubview(imageView)
 
+        imageView.transform = CGAffineTransform(rotationAngle: (.pi / 2))
+
 
         view.bringSubview(toFront: detailsView)
         setUpObjects()
@@ -111,18 +142,17 @@ class ViewController: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
-    }  
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        optionView.isHidden = true
-        blur.isHidden = true
-        
-        sessionPrepare()
-        
-        session?.startRunning()
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        print("========== VIEWWILL DISAPPEAR ==========")
+
+        session?.stopRunning()
+
+    }
+
     
     func setUpObjects() {
 
@@ -151,6 +181,10 @@ class ViewController: UIViewController {
         captureImageView.contentMode = .scaleAspectFill
         captureImageView.frame = CGRect(x: UIScreen.main.bounds.width - 40, y: 0, width: 40, height: 75)
 
+        let tapOnImage = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        captureImageView.addGestureRecognizer(tapOnImage)
+
+
 
         objects.snapIcon.addTarget(self, action: #selector(snap), for: .touchUpInside)
         
@@ -170,6 +204,16 @@ class ViewController: UIViewController {
         objects.setLowerBackgroundConstraints()
         objects.setUpperBackgroundConstraints()
         
+    }
+
+    func handleTap () {
+
+        print ("tapped")
+
+        guard let vc  = self.storyboard?.instantiateViewController(withIdentifier: "PhotoGridCollectionViewController") as? PhotoGridCollectionViewController else { return }
+
+        self.navigationController?.pushViewController(vc, animated: true)
+
     }
 }
 
@@ -224,6 +268,7 @@ extension ViewController {
         }
     }
 
+
     func update(with faceRect: CGRect, text: String) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.2) {
@@ -263,6 +308,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
             filter!.setValue(ciImage, forKey: kCIInputImageKey)
             let filteredImage = UIImage(ciImage: filter!.value(forKey: kCIOutputImageKey) as! CIImage!)
+
 
             DispatchQueue.main.async
                 {
